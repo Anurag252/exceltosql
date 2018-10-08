@@ -1,0 +1,30 @@
+﻿@model ExcelToSql.Models.GridViewModel
+
+
+<table class="table table-striped table-responsive">
+    <thead style="background-color:cadetblue">
+        <tr>
+
+            @foreach (string header in Model.header)
+            {
+                <td>
+                    @header
+                </td>
+            }
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var keyvalue in Model.value)
+        {
+            <tr>
+                @foreach (var value in keyvalue)
+                {
+                <td>
+                   @value
+                </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

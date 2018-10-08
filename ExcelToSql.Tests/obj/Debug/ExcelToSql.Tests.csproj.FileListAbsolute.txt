@@ -1,0 +1,2 @@
+C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql.Tests\obj\Debug\ExcelToSql.Tests.csprojResolveAssemblyReference.cache
+C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql.Tests\obj\Debug\ExcelToSql.Tests.csproj.CoreCompileInputs.cache

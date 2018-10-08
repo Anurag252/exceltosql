@@ -1,0 +1,19 @@
+﻿@model ExcelToSql.Models.GridViewModel
+
+
+<div>
+    <br />
+    <form class="form-group" action="/Home/Read" method="post" enctype="multipart/form-data">
+       @Html.AntiForgeryToken();
+        <input type="file" name="excelFile" class="btn-primary" />
+        <br />
+        <button class="btn btn-primary">Read excel file</button>
+        <label class="@(( ((string)ViewBag.Message) != null && !((string)ViewBag.Message).Contains("error")) ? "text-success" :  "text-danger")">@ViewBag.Message</label>
+    </form>
+    @if (Model != null)
+    {
+        <button class="btn btn-primary" onclick="location.href='@Url.Action("Index", "ConfigureDB")'">Configure and load in Database</button>
+        <br/>
+        @Html.Partial("../PartialViews/Grid", Model);
+    }
+</div>
