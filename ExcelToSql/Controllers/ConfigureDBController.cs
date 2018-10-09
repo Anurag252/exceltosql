@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExcelToSql.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,6 +12,8 @@ namespace ExcelToSql.Controllers
 {
     public class ConfigureDBController : Controller
     {
+        string _connecString;
+       
         // GET: ConfigureDB
         public ActionResult Index()
         {
@@ -23,8 +26,8 @@ namespace ExcelToSql.Controllers
             //Data Source = pun - anuragd02\SQLEXPRESS; Integrated Security = True
             //data Source = pun - anuragd02\SQLEXPRESS; Initial Catalog = DB_Alstom; Integrated Security = True
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = dbName + @"\SQLEXPRESS";
-            builder.InitialCatalog = "DB_Alstom";           
+            builder.DataSource = dbName;
+           // builder.InitialCatalog = "DB_Alstom";           
            
             builder.IntegratedSecurity = true;
             
@@ -35,12 +38,139 @@ namespace ExcelToSql.Controllers
         [HttpPost]
         public ActionResult Connect(string dbName)
         {
-            string conneString = DynamicConnectionString(dbName);
-            DataTable t = (DataTable)Session["dataTable"];
-            dbWrite(conneString,t);
-            return View("Index");
+            DBConfigureViewModel viewModel = new DBConfigureViewModel();
+            viewModel.ConnectionAttempted = true;
+
+            _connecString = DynamicConnectionString(dbName);
+            TempData["connectionString"] = _connecString;
+            using (SqlConnection sqlconn = new SqlConnection(_connecString))
+            {
+                try
+                {
+                    sqlconn.Open();
+                    //Will be closed automatically once sqlconn is disposed
+                    //sqlconn.Close();
+
+                    
+                    viewModel.messageOnConnection = "Connection to database was successful";
+                    
+                }
+                catch(Exception ex)
+                {
+                    viewModel.messageOnConnection = ex.Message;
+                    
+                   
+                }
+
+            }
+            return View("Index", viewModel);
+
+
+            //DataTable t = (DataTable)Session["dataTable"];
+            //dbWrite(conneString,t);
+            //return View("Index");
         }
 
+        private  bool CheckDatabaseExists( string databaseName)
+        {
+           
+            string sqlCreateDBQuery;
+            bool result = false;
+            SqlConnection tmpConn;
+
+            try
+            {
+                tmpConn = new SqlConnection(_connecString);
+
+                sqlCreateDBQuery = string.Format("SELECT database_id FROM sys.databases WHERE Name   = '{0}'", databaseName);
+        
+        using (tmpConn)
+                {
+                    using (SqlCommand sqlCmd = new SqlCommand(sqlCreateDBQuery, tmpConn))
+                    {
+                        tmpConn.Open();
+
+                        object resultObj = sqlCmd.ExecuteScalar();
+
+                        int databaseID = 0;
+
+                        if (resultObj != null)
+                        {
+                            int.TryParse(resultObj.ToString(), out databaseID);
+                        }
+
+                        tmpConn.Close();
+
+                        result = (databaseID > 0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult pushToDb(string dbName , string tblName)
+        {
+            DBConfigureViewModel viewModel = new DBConfigureViewModel();
+            _connecString = (string)TempData["connectionString"];
+            TempData.Keep();
+
+
+            using (SqlConnection sqlconn = new SqlConnection(_connecString))
+            {
+                try
+                {
+                    if (CheckDatabaseExists(dbName) == false)
+                    {
+                        sqlconn.Open();
+                        using (SqlCommand sql = new SqlCommand())
+                        {
+                            try
+                            {
+                                sql.CommandText = "CREATE database @dbname";
+                                sql.Parameters.Add(new SqlParameter("@dbname", dbName));
+                                sql.Connection = sqlconn;
+                                sql.ExecuteNonQuery();
+                                viewModel.messageOnConnection = "Created a database with name" + dbName;
+                            }
+                            catch (Exception ex)
+                            {
+                                viewModel.messageOnConnection = ex.Message;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        viewModel.messageOnConnection = "Found an exisitng databse with name as " + dbName;
+                    }
+                    //Will be closed automatically once sqlconn is disposed
+                    //sqlconn.Close();
+
+
+                    
+
+                }
+                catch (Exception ex)
+                {
+                    viewModel.messageOnConnection = ex.Message;
+
+
+                }
+
+            }
+            return View("Index", viewModel);
+
+
+            //DataTable t = (DataTable)Session["dataTable"];
+            //dbWrite(conneString,t);
+            //return View("Index");
+        }
+        
 
         public static string CreateTABLE(string tableName, DataTable table)
         {

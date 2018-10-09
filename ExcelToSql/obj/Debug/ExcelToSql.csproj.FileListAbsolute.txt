@@ -151,7 +151,6 @@ D:\exceltosql\ExcelToSql\bin\System.Web.Razor.xml
 D:\exceltosql\ExcelToSql\bin\System.Web.WebPages.xml
 D:\exceltosql\ExcelToSql\bin\System.Web.WebPages.Deployment.xml
 D:\exceltosql\ExcelToSql\bin\System.Web.WebPages.Razor.xml
-D:\exceltosql\ExcelToSql\bin\Microsoft.Web.Infrastructure.xml
 D:\exceltosql\ExcelToSql\obj\Debug\ExcelToSql.csproj.CopyComplete
 D:\exceltosql\ExcelToSql\obj\Debug\ExcelToSql.dll
 D:\exceltosql\ExcelToSql\obj\Debug\ExcelToSql.pdb
@@ -193,3 +192,19 @@ C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql\bin\Microsoft.AI.Web.xml
 C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql\bin\Microsoft.ApplicationInsights.xml
 C:\Users\Anurag\source\repos\ExcelToSql\ExcelToSql\obj\Debug\ExcelToSql.csprojResolveAssemblyReference.cache
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.DependencyCollector.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.PerfCounterCollector.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.ServerTelemetryChannel.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.Web.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.WindowsServer.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.ApplicationInsights.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AspNet.TelemetryCorrelation.dll
+D:\exceltosql\ExcelToSql\bin\System.Diagnostics.DiagnosticSource.dll
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.DependencyCollector.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.PerfCounterCollector.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.ServerTelemetryChannel.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.Web.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.AI.WindowsServer.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.ApplicationInsights.xml
+D:\exceltosql\ExcelToSql\bin\Microsoft.AspNet.TelemetryCorrelation.xml
+D:\exceltosql\ExcelToSql\bin\System.Diagnostics.DiagnosticSource.xml

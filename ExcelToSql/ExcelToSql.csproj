@@ -177,6 +177,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GridViewModelDB.cs" />
+    <Compile Include="Models\DBConfigureViewModel.cs" />
     <Compile Include="Models\GridViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

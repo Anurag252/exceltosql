@@ -1,4 +1,5 @@
-﻿
+﻿@model ExcelToSql.Models.DBConfigureViewModel
+
 @{
     ViewBag.Title = "Index";
 }
@@ -15,19 +16,45 @@
 
 		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 			<div class="card-body">
-				<form  class="form-group" method="post" action="/ConfigureDB/Connect">
+				<form class="form-group" method="post" action="/ConfigureDB/Connect" style="display: @(Model != null && Model.messageOnConnection.Contains("successful") ? "none" :"visible")">
 
-					<div class="form-control" style="height:60px"  >
+					<div class="form-control" style="height:55px">
 						<label>Enter your remote DB address</label>
-						<input type="text" class="text-primary text-justify" name="dbName"/>
-						<br/>
+						<input type="text" class="text-primary text-justify" name="dbName" />
+						<br />
 					</div>
-					<br/>
+					<br />
 					<button class="btn btn-primary">Connect</button>
+					@if (Model != null && Model.ConnectionAttempted == true)
+					{
 
+						<label class="@(Model.messageOnConnection.Contains("successful") ? "text-primary" :"text-danger")">@Model.messageOnConnection</label>
+					}
+				</form>
+
+				<form class="form-group" method="post" action="/ConfigureDB/pushToDb" style="display: @(Model != null  && Model.messageOnConnection.Contains("successful") ? "visible" :"none")">
+					@if (Model != null && Model.ConnectionAttempted == true)
+					{
+
+						<label class="@(Model.messageOnConnection.Contains("successful") ? "text-primary" :"text-danger")">@Model.messageOnConnection</label>
+					}
+					<div class="form-control" style="height:80px">
+						<label>Enter existing DB name /DB to create</label>
+						<input type="text" class="text-primary text-justify" style="float:right" name="dbName" />
+						<br />
+
+						<label>Enter existing table name /tablename to create</label>
+						<input type="text" class="text-primary text-justify" style="float:right" name="tblName" />
+						<br />
+					</div>
+					<br />
+					<button class="btn btn-primary">Push to DB</button>
 
 				</form>
-				
+
+
+
+
 			</div>
 		</div>
 	</div>
