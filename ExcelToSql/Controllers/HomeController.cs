@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using ExcelDataReader.Core;
 using ExcelToSql.Models;
+using System.Data;
 
 namespace ExcelToSql.Controllers
 {
@@ -73,37 +75,44 @@ namespace ExcelToSql.Controllers
         private GridViewModel readExcelFile(string filePath)
         {
             GridViewModel grdiViewModel = new GridViewModel();
-            
+            DataTable dtProductCatalog = null;
             List<List<string>> rowvalue = new List<List<string>>();
             using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
 
-                // Auto-detect format, supports:
-                //  - Binary Excel files (2.0-2003 format; *.xls)
-                //  - OpenXml Excel files (2007 format; *.xlsx)
+               
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
+                     dtProductCatalog = reader.AsDataSet().Tables[0];
+
+                    Session["dataTable"] = dtProductCatalog;
                     do
                     {
                         while (reader.Read())
                         {
-                            if (reader.Name.Contains("SalesOrder"))
+                            
+                            try
                             {
                                 List<string> cell = new List<string>();
                                 for (int i = 0; i < reader.FieldCount; i++)
-                                {
-                                    cell.Add(reader[i].ToString());
+                                {                                   
+                                    cell.Add(reader[i] != null ? reader[i].ToString() : "");
                                 }
                                 rowvalue.Add(cell);
                             }
-                         
+                            catch (Exception ex)
+                            {
+
+                            }
+                           
+                           
                         }
-                    } while (reader.NextResult()) ;
+                    } while (reader.NextResult());
 
-                // 2. Use the AsDataSet extension method
-
+                }
             }
-        }
+
+           
             grdiViewModel.value = rowvalue;
             grdiViewModel.header = grdiViewModel.value[0];
             grdiViewModel.value.RemoveAt(0);
