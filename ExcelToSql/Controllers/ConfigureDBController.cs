@@ -27,8 +27,7 @@ namespace ExcelToSql.Controllers
             //data Source = pun - anuragd02\SQLEXPRESS; Initial Catalog = DB_Alstom; Integrated Security = True
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
             builder.DataSource = dbName;
-           // builder.InitialCatalog = "DB_Alstom";           
-           
+           // builder.InitialCatalog = "DB_Alstom";
             builder.IntegratedSecurity = true;
             
             return builder.ConnectionString.ToString();
@@ -117,36 +116,66 @@ namespace ExcelToSql.Controllers
         public ActionResult pushToDb(string dbName , string tblName)
         {
             DBConfigureViewModel viewModel = new DBConfigureViewModel();
+            viewModel.ConnectionAttempted = true;
             _connecString = (string)TempData["connectionString"];
             TempData.Keep();
-
+           
+            
+            DataTable t = (DataTable)Session["dataTable"];
 
             using (SqlConnection sqlconn = new SqlConnection(_connecString))
             {
                 try
                 {
                     if (CheckDatabaseExists(dbName) == false)
-                    {
+                    { 
                         sqlconn.Open();
                         using (SqlCommand sql = new SqlCommand())
                         {
                             try
                             {
                                 sql.CommandText = "CREATE database @dbname";
-                                sql.Parameters.Add(new SqlParameter("@dbname", dbName));
+                                sql.Parameters.AddWithValue("@dbname", dbName) ;
                                 sql.Connection = sqlconn;
                                 sql.ExecuteNonQuery();
-                                viewModel.messageOnConnection = "Created a database with name" + dbName;
+
+                                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                                builder.ConnectionString = _connecString;
+                                builder.InitialCatalog = dbName;
+                                var  connString = builder.ConnectionString;
+                                dbWrite(connString, t, tblName);
+                                TempData["connectionString"] = connString;
+
+                                dbWrite(connString, t, tblName);
+                                viewModel.Haserror = false;
+                                viewModel.messageOnConnection = "Created a database  with name" + dbName;
+                               
                             }
                             catch (Exception ex)
                             {
+                                viewModel.Haserror = true;
                                 viewModel.messageOnConnection = ex.Message;
                             }
                         }
                     }
                     else
                     {
-                        viewModel.messageOnConnection = "Found an exisitng databse with name as " + dbName;
+                        try
+                        {
+                            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                            builder.ConnectionString = _connecString;
+                            builder.InitialCatalog = dbName;
+                           var connString = builder.ConnectionString;
+                            dbWrite(connString, t, tblName);
+                            TempData["connectionString"] = connString;
+                            viewModel.Haserror = false;
+                            viewModel.messageOnConnection = "Found an exisitng databse with name as " + dbName + " and the excel data has been pushed table " + tblName;
+                        }
+                        catch(Exception ex)
+                        {
+                            viewModel.Haserror = true;
+                            viewModel.messageOnConnection = ex.Message;
+                        }
                     }
                     //Will be closed automatically once sqlconn is disposed
                     //sqlconn.Close();
@@ -157,6 +186,7 @@ namespace ExcelToSql.Controllers
                 }
                 catch (Exception ex)
                 {
+                    viewModel.Haserror = true;
                     viewModel.messageOnConnection = ex.Message;
 
 
@@ -214,7 +244,7 @@ namespace ExcelToSql.Controllers
             return sqlsc.Substring(0, sqlsc.Length - 1) + "\n)";
         }
 
-        private void dbWrite(string conneString, DataTable t)
+        private void dbWrite(string conneString, DataTable t ,string tblName)
         {
             try
             {
@@ -222,7 +252,7 @@ namespace ExcelToSql.Controllers
 
                 using (SqlDataAdapter da = new SqlDataAdapter())
                 {
-                    var c = CreateTABLE("mytable", t);
+                    var c = CreateTABLE(tblName, t);
 
                     da.SelectCommand = new SqlCommand();
                     da.SelectCommand.CommandText = c;
@@ -232,7 +262,7 @@ namespace ExcelToSql.Controllers
                           new SqlBulkCopy(conneString))
                     {
                         bulkCopy.DestinationTableName =
-                            "mytable";
+                            tblName;
 
                         try
                         {

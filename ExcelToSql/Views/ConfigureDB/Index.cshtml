@@ -16,7 +16,7 @@
 
 		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
 			<div class="card-body">
-				<form class="form-group" method="post" action="/ConfigureDB/Connect" style="display: @(Model != null && Model.messageOnConnection.Contains("successful") ? "none" :"visible")">
+				<form class="form-group" method="post" action="/ConfigureDB/Connect" style="display: @(Model != null && Model.Haserror == false ? "none" :"visible")">
 
 					<div class="form-control" style="height:55px">
 						<label>Enter your remote DB address</label>
@@ -28,15 +28,15 @@
 					@if (Model != null && Model.ConnectionAttempted == true)
 					{
 
-						<label class="@(Model.messageOnConnection.Contains("successful") ? "text-primary" :"text-danger")">@Model.messageOnConnection</label>
+						<label class="@(Model.messageOnConnection.Contains("successful") ? "text-success" :"text-danger")">@Model.messageOnConnection</label>
 					}
 				</form>
 
-				<form class="form-group" method="post" action="/ConfigureDB/pushToDb" style="display: @(Model != null  && Model.messageOnConnection.Contains("successful") ? "visible" :"none")">
+				<form class="form-group" method="post" action="/ConfigureDB/pushToDb" style="display: @(Model != null  && Model.Haserror == false ? "visible" :"none")">
 					@if (Model != null && Model.ConnectionAttempted == true)
 					{
 
-						<label class="@(Model.messageOnConnection.Contains("successful") ? "text-primary" :"text-danger")">@Model.messageOnConnection</label>
+						<label class="@(Model.ConnectionAttempted == true ? "text-success" :"text-danger")">@Model.messageOnConnection</label>
 					}
 					<div class="form-control" style="height:80px">
 						<label>Enter existing DB name /DB to create</label>

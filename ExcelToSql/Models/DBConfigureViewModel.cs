@@ -9,5 +9,6 @@ namespace ExcelToSql.Models
     {
        public bool ConnectionAttempted;
        public string messageOnConnection;
+        public bool Haserror;
     }
 }
