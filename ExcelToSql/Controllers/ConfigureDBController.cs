@@ -134,8 +134,8 @@ namespace ExcelToSql.Controllers
                         {
                             try
                             {
-                                sql.CommandText = "CREATE database @dbname";
-                                sql.Parameters.AddWithValue("@dbname", dbName) ;
+                                sql.CommandText = "CREATE database " + dbName;
+                                //sql.Parameters.AddWithValue("@dbname", dbName) ;
                                 sql.Connection = sqlconn;
                                 sql.ExecuteNonQuery();
 
@@ -144,6 +144,7 @@ namespace ExcelToSql.Controllers
                                 builder.InitialCatalog = dbName;
                                 var  connString = builder.ConnectionString;
                                 dbWrite(connString, t, tblName);
+
                                 TempData["connectionString"] = connString;
 
                                 dbWrite(connString, t, tblName);

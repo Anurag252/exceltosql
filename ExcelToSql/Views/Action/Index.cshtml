@@ -1,0 +1,104 @@
+﻿@model ExcelToSql.Models.ActionViewModel
+
+<script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript">
+	$("#btn1").click(function () {
+		alert("");
+		$("#html").val($('#commands').val());
+		$('form#select').submit();
+	})
+
+
+	$("#dropdowndatabase").click(function () {
+		$.ajax({
+			url: "/ActionOn/selectQuery",
+			type: 'POST',
+			data: 'USE master;SELECT NAME FROM sysdatabases;',
+			success: function (result) {
+				alert(result);
+			}
+		});
+	});
+
+</script>
+
+<div class="dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdowndatabase" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		Select Database
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<a class="dropdown-item" href="#">Action</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
+	</div>
+</div>
+
+<div class="dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		Select table
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<a class="dropdown-item" href="#">Action</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-3" style="background-color:darkgrey">
+		<div class="card" style="background-color:darkgrey">
+			<div class="card-body">
+				<h5 class="card-title">Run Stored Procedures</h5>
+				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+				<form id="select" action=" @Url.Action("selectCommands", "Action")" method="POST">
+					<input type="hidden" name="selectCommands" id="html" value="added via JS">
+					<a href="#" id="btn1" class="card-link">Card link</a>
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+	<div class="col-1"></div>
+
+	<div class="col-3" style="background-color:darkgrey">
+		<div class="card" style="background-color:darkgrey">
+			<div class="card-body">
+				<h5 class="card-title">Run SELECT Queries</h5>
+				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+				<a href="#" class="card-link">Card link</a>
+				<a href="#" class="card-link">Another link</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-1"></div>
+
+
+	<div class="col-3" style="background-color:darkgrey">
+		<div class="card" style="background-color:darkgrey">
+			<div class="card-body">
+				<h5 class="card-title">Run Other DML Statements</h5>
+				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+				<a href="#" class="card-link">Card link</a>
+				<a href="#" class="card-link">Another link</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-1"></div>
+</div>
+
+<br/>
+<div class="row">
+	<div class="col-12" style="height:120px">
+		<textarea class="col-12" style="height:120px" id="commands"> </textarea>
+	</div>
+</div>
+
+@if (Model != null && Model.gridViewModel != null)
+{
+	@Html.Partial("../PartialViews/Grid", Model.gridViewModel);
+}
