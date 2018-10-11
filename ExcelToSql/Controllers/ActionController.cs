@@ -88,7 +88,7 @@ namespace ExcelToSql.Controllers
             {
                 return new JsonResult()
                 {
-                    Data = null
+                    Data = "{\"error\" :\"something did not work\" }"
                 };
             }
 

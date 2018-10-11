@@ -1,36 +1,19 @@
 ﻿@model ExcelToSql.Models.ActionViewModel
 
-<script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript">
-	$("#btn1").click(function () {
-		alert("");
-		$("#html").val($('#commands').val());
-		$('form#select').submit();
-	})
 
-
-	$("#dropdowndatabase").click(function () {
-		$.ajax({
-			url: "/ActionOn/selectQuery",
-			type: 'POST',
-			data: 'USE master;SELECT NAME FROM sysdatabases;',
-			success: function (result) {
-				alert(result);
-			}
-		});
-	});
-
-</script>
 
 <div class="dropdown">
-	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdowndatabase" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<button id="selectDB" class="btn btn-primary">
 		Select Database
 	</button>
-	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		<a class="dropdown-item" href="#">Action</a>
-		<a class="dropdown-item" href="#">Another action</a>
-		<a class="dropdown-item" href="#">Something else here</a>
-	</div>
+	
+
+	
 </div>
+
+<select id="menuitem" style="width:200px">
+	<option value="val1">Val 1</option>
+</select>
 
 <div class="dropdown">
 	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -91,12 +74,51 @@
 	<div class="col-1"></div>
 </div>
 
-<br/>
+<br />
 <div class="row">
 	<div class="col-12" style="height:120px">
 		<textarea class="col-12" style="height:120px" id="commands"> </textarea>
 	</div>
 </div>
+<script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript"></script>
+<script>
+	$("#btn1").click(function () {
+		alert("");
+		$("#html").val($('#commands').val());
+		$('form#select').submit();
+	})
+
+	var dataObjec = {
+		"selectCommands": "USE master;SELECT NAME FROM sysdatabases;"
+	};
+
+	$("#selectDB").click(function () {
+		alert();
+		$.ajax({
+			
+			url: "/Action/selectQuery",
+			type: 'POST',
+			data: dataObjec,
+			success: function (result) {
+				$("#menuitem").html(createOptions(result))
+					;
+				
+			}
+		});
+	});
+
+	function createOptions(result)
+	{
+		var dbNames = JSON.parse(result);
+		let dbNameJson = "";
+		for (let dbname of dbNames) {
+			dbNameJson = dbNameJson + '< option value = " ' + dbname + '" >' + dbname + '</option >';
+		}
+		alert(dbNameJson);
+
+		return $.parseHTML(dbNameJson.replace(null,""));;
+	}
+</script>
 
 @if (Model != null && Model.gridViewModel != null)
 {
