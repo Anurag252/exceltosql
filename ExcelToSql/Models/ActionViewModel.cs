@@ -8,5 +8,7 @@ namespace ExcelToSql.Models
     public class ActionViewModel
     {
         public GridViewModel gridViewModel;
+        public string databaseName;
+        public string tableName;
     }
 }

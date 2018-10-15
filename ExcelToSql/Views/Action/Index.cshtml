@@ -3,124 +3,87 @@
 
 
 <div class="dropdown">
-	<button id="selectDB" class="btn btn-primary">
-		Select Database
-	</button>
-	
+    <span class="label label-default">Connected to Database<span class="alert alert-primary" style="padding:0px"> @Model.databaseName</span> and data pushed to<span class="alert alert-primary" style="padding:0px"> @Model.tableName</span></span>
 
-	
+
 </div>
-
-<select id="menuitem" style="width:200px">
-	<option value="val1">Val 1</option>
-</select>
-
-<div class="dropdown">
-	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		Select table
-	</button>
-	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		<a class="dropdown-item" href="#">Action</a>
-		<a class="dropdown-item" href="#">Another action</a>
-		<a class="dropdown-item" href="#">Something else here</a>
-	</div>
-</div>
-
-
 <div class="row">
-	<div class="col-3" style="background-color:darkgrey">
-		<div class="card" style="background-color:darkgrey">
-			<div class="card-body">
-				<h5 class="card-title">Run Stored Procedures</h5>
-				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    
 
-				<form id="select" action=" @Url.Action("selectCommands", "Action")" method="POST">
-					<input type="hidden" name="selectCommands" id="html" value="added via JS">
-					<a href="#" id="btn1" class="card-link">Card link</a>
-				</form>
-
-
-			</div>
-		</div>
-	</div>
-	<div class="col-1"></div>
-
-	<div class="col-3" style="background-color:darkgrey">
-		<div class="card" style="background-color:darkgrey">
-			<div class="card-body">
-				<h5 class="card-title">Run SELECT Queries</h5>
-				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="card-link">Card link</a>
-				<a href="#" class="card-link">Another link</a>
-			</div>
-		</div>
-	</div>
-	<div class="col-1"></div>
-
-
-	<div class="col-3" style="background-color:darkgrey">
-		<div class="card" style="background-color:darkgrey">
-			<div class="card-body">
-				<h5 class="card-title">Run Other DML Statements</h5>
-				<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="card-link">Card link</a>
-				<a href="#" class="card-link">Another link</a>
-			</div>
-		</div>
-	</div>
-	<div class="col-1"></div>
+    <div class="col-3" style="background-color:ghostwhite">
+        <form id="sp">
+            <h2>Run STORED PROCEDURE</h2>
+            <a href="#" id="StoredProc">Click to execute</a>
+        </form>
+    </div>
+  
+    <div class="col-1"></div>
+    
+    <div class="col-3" style="background-color:darkgrey">
+        <form id="select">
+            <h1>Run Select Statement</h1>
+            <a href="" id="selectStatement">Click to execute</a>
+        </form>
+    </div>
+    
+    <div class="col-1"></div>
+    
+    <div class="col-3" style="background-color:darkgrey">
+        <form id="dml">
+            <h1>Run other DML Statements</h1>
+            <a  href="#" id="otherDML">Click to execute</a>
+        </form>
+    </div>
+    
+    <div class="col-1"></div>
 </div>
 
-<br />
-<div class="row">
-	<div class="col-12" style="height:120px">
-		<textarea class="col-12" style="height:120px" id="commands"> </textarea>
-	</div>
-</div>
-<script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript"></script>
-<script>
-	$("#btn1").click(function () {
-		alert("");
-		$("#html").val($('#commands').val());
-		$('form#select').submit();
-	})
+    <br />
+    <div class="row">
+        <div class="col-12" style="height:120px">
+            <textarea class="col-12" style="height:120px" id="commands"> </textarea>
+        </div>
+    </div>
+    <script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript"></script>
+    <script>
+        $("#btn1").click(function () {
 
-	var dataObjec = {
-		"selectCommands": "USE master;SELECT NAME FROM sysdatabases;"
-	};
+            $("#html").val($('#commands').val());
+            $('form#select').submit();
+        })
 
-	$("#selectDB").click(function () {
-		alert();
-		$.ajax({
-			
-			url: "/Action/selectQuery",
-			type: 'POST',
-			data: dataObjec,
-			success: function (result) {
-				$("#menuitem").html(createOptions(result))
-					;
-				
-			}
-		});
-	});
+        var dataObjec = {
+            "selectCommands": "USE master;SELECT NAME FROM sysdatabases;"
+        };
 
-	function createOptions(result)
-	{
-		var dbNames = JSON.parse(result);
-		let dbNameJson = "";
-		for (let dbname of dbNames) {
-			dbNameJson = dbNameJson + '< option value = " ' + dbname + '" >' + dbname + '</option >';
-		}
-		alert(dbNameJson);
+        $("#selectDB").click(function () {
 
-		return $.parseHTML(dbNameJson.replace(null,""));;
-	}
-</script>
+            $.ajax({
 
-@if (Model != null && Model.gridViewModel != null)
-{
-	@Html.Partial("../PartialViews/Grid", Model.gridViewModel);
-}
+                url: "/Action/selectQuery",
+                type: 'POST',
+                data: dataObjec,
+                success: function (result) {
+                    $("#menuitem").html(createOptions(result))
+                        ;
+
+                }
+            });
+        });
+
+        function createOptions(result) {
+            var dbNames = JSON.parse(result);
+            let dbNameJson = "";
+            for (let dbname of dbNames) {
+                dbNameJson = dbNameJson + '< option value = " ' + dbname + '" >' + dbname + '</option >';
+            }
+            alert(dbNameJson);
+
+            return $.parseHTML(dbNameJson.replace(null, ""));;
+        }
+    </script>
+
+    @if (Model != null && Model.gridViewModel != null)
+    {
+        @Html.Partial("../PartialViews/Grid", Model.gridViewModel);
+    }

@@ -14,6 +14,7 @@ namespace ExcelToSql.Controllers
         // GET: Action
         public ActionResult Index()
         {
+                    
             return View();
         }
 

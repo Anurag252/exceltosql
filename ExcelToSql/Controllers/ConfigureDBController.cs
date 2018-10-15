@@ -194,7 +194,16 @@ namespace ExcelToSql.Controllers
                 }
 
             }
-            return View("Index", viewModel);
+
+            ActionViewModel viewModelforAction = new ActionViewModel()
+            {
+                databaseName = dbName,
+                tableName = tblName
+
+            };
+            return View("~/Views/Action/Index.cshtml", viewModelforAction);
+            //return RedirectToAction("Index", "Action");
+           
 
 
             //DataTable t = (DataTable)Session["dataTable"];
