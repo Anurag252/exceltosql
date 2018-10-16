@@ -115,6 +115,8 @@ namespace ExcelToSql.Controllers
         [HttpPost]
         public ActionResult pushToDb(string dbName , string tblName)
         {
+            dbName = dbName.Trim(new[] { ' ' });
+            tblName = tblName.Trim(new[] { ' ' });
             DBConfigureViewModel viewModel = new DBConfigureViewModel();
             viewModel.ConnectionAttempted = true;
             _connecString = (string)TempData["connectionString"];

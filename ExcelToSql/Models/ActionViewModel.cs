@@ -10,5 +10,6 @@ namespace ExcelToSql.Models
         public GridViewModel gridViewModel;
         public string databaseName;
         public string tableName;
+        public string statusMesaage;
     }
 }

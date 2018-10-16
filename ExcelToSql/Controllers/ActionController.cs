@@ -136,36 +136,50 @@ namespace ExcelToSql.Controllers
                         gridViewModel.header = gridViewModel.value[0];
                         gridViewModel.value.RemoveAt(0);
                         actionViewModel.gridViewModel = gridViewModel;
+                        actionViewModel.databaseName = (string)HttpContext.Cache["dbNameInAction"];
+                        actionViewModel.tableName = (string)HttpContext.Cache["tblNameInAction"];
+                        actionViewModel.statusMesaage = "The DML command was successful";
+
                     }
                 }
             }
             catch (Exception ex)
             {
-
+                actionViewModel.statusMesaage = "Exception occured " + ex.Message;
             }
             return View("Index" , actionViewModel);
         }
 
         public ActionResult executeNonQuery(string executeNonQuery)
         {
+            ActionViewModel actionViewModel = new ActionViewModel();
+            GridViewModel gridViewModel = new GridViewModel();
             try
             {
+                actionViewModel.databaseName = (string)HttpContext.Cache["dbNameInAction"];
+                actionViewModel.tableName = (string)HttpContext.Cache["tblNameInAction"];
                 string connectionString = (string)TempData["connectionString"];
                 TempData.Keep();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand sqlcmd = new SqlCommand(executeNonQuery, conn))
                     {
-                        sqlcmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        conn.Open();
+                        sqlcmd.CommandType = System.Data.CommandType.Text;
                         sqlcmd.ExecuteNonQuery();
                     }
                 }
+          
+
+            
+           
+            actionViewModel.statusMesaage = "The DML command was successful";
             }
             catch (Exception ex)
             {
-
+                actionViewModel.statusMesaage = "Exception occured "+ ex.Message;
             }
-            return View();
+            return View("Index",actionViewModel);
         }
     }
 }
