@@ -14,15 +14,17 @@
         <form id="sp">
             <h2>Run STORED PROCEDURE</h2>
             <a href="#" id="StoredProc">Click to execute</a>
+            <input type="hidden" id="html"/>
         </form>
     </div>
   
     <div class="col-1"></div>
     
     <div class="col-3" style="background-color:darkgrey">
-        <form id="select">
+        <form id="select" action="~/Action/selectCommands" method="post">
             <h1>Run Select Statement</h1>
-            <a href="" id="selectStatement">Click to execute</a>
+            <a href="#" id="selectStatement">Click to execute</a>
+            <input type="hidden" id="htmls" name="selectCommands" />
         </form>
     </div>
     
@@ -32,6 +34,7 @@
         <form id="dml">
             <h1>Run other DML Statements</h1>
             <a  href="#" id="otherDML">Click to execute</a>
+            <input type="hidden" id="html" />
         </form>
     </div>
     
@@ -46,9 +49,9 @@
     </div>
     <script src="@Url.Content("~/Scripts/jquery-3.3.1.js")" type="text/javascript"></script>
     <script>
-        $("#btn1").click(function () {
-
-            $("#html").val($('#commands').val());
+        $("#selectStatement").click(function () {
+            alert();
+            $("#htmls").val($('#commands').val());
             $('form#select').submit();
         })
 
